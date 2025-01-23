@@ -10,15 +10,15 @@ PyVeritas is code-aware, behavior-driven, and environment-adaptive. It doesn’t
 
 # 🌟 Features
 
-Intelligent Fuzzing: Automatically generates meaningful fuzzing inputs tailored to your specific code logic.
+**Intelligent Fuzzing**: Automatically generates meaningful fuzzing inputs tailored to your specific code logic.
 
-Behavioural Validation: Compare your program's outputs against expected behaviours using AI models.
+**Behavioural Validation**: Compare your program's outputs against expected behaviours using AI models.
 
-Dynamic Test Optimization: Keeps your test suite lean and relevant by analyzing historical failures and code changes.
+**Dynamic Test Optimization**: Keeps your test suite lean and relevant by analyzing historical failures and code changes.
 
-Cross-Environment Simulation: Test across multiple Python versions and runtime environments.
+**Cross-Environment Simulation**: Test across multiple Python versions and runtime environments.
 
-Actionable Insights: Provides real-time feedback on test coverage, bottlenecks, and high-risk areas.
+**Actionable Insights**: Provides real-time feedback on test coverage, bottlenecks, and high-risk areas.
 
 # 🛠️ Installation
 
