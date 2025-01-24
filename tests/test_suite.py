@@ -1,34 +1,26 @@
+import argparse
 from pyveritas import VeritasTestSuite, VeritasFuzzer
 
 # Pre-existing function to test
 def calculate_discount(price: float, discount: float) -> float:
-    print(f"price={price}, discount={discount}")  # Debug print
     if price <= 0 or discount < 0 or discount > 100:
-        print("Raising ValueError: Invalid price or discount")
         raise ValueError("Invalid price or discount")
     return price * (1 - discount / 100)
 
-# Testing and fuzzing integration
-if __name__ == "__main__":
-    print("Running test suite...")
-    # Instantiate the VeritasTestSuite
+def run_tests():
+    # Test suite
     suite = VeritasTestSuite("DiscountCalculatorTests")
-    # Setup indivual test parameters
-    suite.test("Discount calculation is correct",
-               lambda: calculate_discount(100, 20) == 80)
-    # Setup individual test parameters
-    suite.test(
-        "Invalid discount should raise ValueError",
-        lambda: calculate_discount(-10, 50),
-        should_raise=ValueError
-    )
-    # Explicitly run the test suite
-    suite.run()  
+    
+    suite.test("Discount calculation is correct", lambda: calculate_discount(100, 20) == 80)
+    suite.test("Invalid discount should raise ValueError", lambda: calculate_discount(-10, 50), should_raise=ValueError)
+    
+    suite.run()  # Run the test suite
+    suite.summary()  # Output the summary of the test suite
 
-    print("Running fuzz tests...")
-    # Instantiate the VeritasFuzzer
+def run_fuzz_tests():
+    # Fuzz tests
     fuzzer = VeritasFuzzer("DiscountCalculatorFuzzing")
-    # Setup fuzzing parameters
+    
     fuzzer.test(
         input_spec={
             "price": lambda: VeritasFuzzer.float_range(0, 1000),
@@ -36,11 +28,18 @@ if __name__ == "__main__":
         },
         iterations=1000,
     )
-    # Explicitly run the fuzz tests
-    fuzzer.run(calculate_discount)
+    fuzzer.run(calculate_discount)  # Run the fuzz tests
+    fuzzer.summary()  # Output the summary of the fuzz tests
 
-    print("Test suite and fuzz tests complete.")
-    # Output the summary of the test suite
-    suite.summary()
-    # Output the summary of the fuzz tests
-    fuzzer.summary()
+def main():
+    parser = argparse.ArgumentParser(description="Run tests or fuzz tests on your Python code.")
+    parser.add_argument('action', choices=['test', 'fuzz'], help="Specify 'test' to run unit tests or 'fuzz' to run fuzzing tests.")
+    args = parser.parse_args()
+    
+    if args.action == 'test':
+        run_tests()
+    elif args.action == 'fuzz':
+        run_fuzz_tests()
+
+if __name__ == "__main__":
+    main()
