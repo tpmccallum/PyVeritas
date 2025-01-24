@@ -35,35 +35,78 @@ Example, Testing a Calculator Function:
 ```python
 from pyveritas import VeritasTestSuite, VeritasFuzzer
 
-# Define the function to test
-def calculate(operation: str, a: float, b: float) -> float:
-    if operation == "add":
-        return a + b
-    elif operation == "subtract":
-        return a - b
-    elif operation == "multiply":
-        return a * b
-    elif operation == "divide":
-        if b == 0:
-            raise ValueError("Cannot divide by zero!")
-        return a / b
-    else:
-        raise ValueError(f"Unknown operation: {operation}")
+# Pre-existing function to test
+def calculate_discount(price: float, discount: float) -> float:
+    print(f"price={price}, discount={discount}")  # Debug print
+    if price <= 0 or discount < 0 or discount > 100:
+        print("Raising ValueError: Invalid price or discount")
+        raise ValueError("Invalid price or discount")
+    return price * (1 - discount / 100)
 
-# Create and run a test suite
-with VeritasTestSuite("CalculatorTests") as suite:
-    suite.test("Addition works", lambda: calculate("add", 2, 3) == 5)
-    suite.test("Division by zero", lambda: calculate("divide", 10, 0), should_raise=ValueError)
+# Testing and fuzzing integration
+if __name__ == "__main__":
+    print("Running test suite...")
+    # Instantiate the VeritasTestSuite
+    suite = VeritasTestSuite("DiscountCalculatorTests")
+    # Setup indivual test parameters
+    suite.test("Discount calculation is correct",
+               lambda: calculate_discount(100, 20) == 80)
+    # Setup individual test parameters
+    suite.test(
+        "Invalid discount should raise ValueError",
+        lambda: calculate_discount(-10, 50),
+        should_raise=ValueError
+    )
+    # Explicitly run the test suite
+    suite.run()  
 
-# Fuzz the function
-VeritasFuzzer(calculate).run(
-    input_spec={
-        "operation": VeritasFuzzer.choice(["add", "subtract", "multiply", "divide", "unknown"]),
-        "a": VeritasFuzzer.float_range(-1e6, 1e6),
-        "b": VeritasFuzzer.float_range(-1e6, 1e6),
-    },
-    iterations=1000
-)
+    print("Running fuzz tests...")
+    # Instantiate the VeritasFuzzer
+    fuzzer = VeritasFuzzer("DiscountCalculatorFuzzing")
+    # Setup fuzzing parameters
+    fuzzer.test(
+        input_spec={
+            "price": lambda: VeritasFuzzer.float_range(0, 1000),
+            "discount": lambda: VeritasFuzzer.float_range(0, 100),
+        },
+        iterations=1000,
+    )
+    # Explicitly run the fuzz tests
+    fuzzer.run(calculate_discount)
+
+    print("Test suite and fuzz tests complete.")
+    # Output the summary of the test suite
+    suite.summary()
+    # Output the summary of the fuzz tests
+    fuzzer.summary()
+```
+
+The code above will return the following:
+
+```bash
+Running test suite...
+Running test suite: DiscountCalculatorTests
+Test 1 PASSED: Discount calculation is correct
+Test 2 FAILED: Invalid discount should raise ValueError (Unexpected exception: Invalid price or discount)
+Running fuzz tests...
+Fuzzing iteration 1: PASSED with inputs {'price': 19.24241692205497, 'discount': 68.60162489179038}
+Fuzzing iteration 2: PASSED with inputs {'price': 334.27165125550397, 'discount': 16.447106935810307}
+
+...
+
+Fuzzing iteration 999: PASSED with inputs {'price': 612.4293011723595, 'discount': 27.494736134752873}
+Fuzzing iteration 1000: PASSED with inputs {'price': 232.15767909051777, 'discount': 25.633668078376516}
+----------------------------------------
+Test Summary for Suite: DiscountCalculatorTests
+Total Tests Run: 2
+Passed: 2
+Failed: 0
+
+----------------------------------------
+Fuzzing Summary for Function: DiscountCalculatorFuzzing
+Total Iterations: 1000
+Passed: 1000
+Failed: 0
 ```
 
 # 🧠 How It Works
