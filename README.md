@@ -109,14 +109,3 @@ Failed: 0
 ```
 
 PyVeritas aims to simplify advanced testing scenarios without requiring users to write extensive boilerplate code or understand complex concepts.
-
-# 📚 Documentation
-
-Comprehensive documentation is available at PyVeritas Docs.
-
-# 🖤 Contributing
-Contributions are welcome! Please read our CONTRIBUTING.md for guidelines on how to get started.
-
-# 📝 License
-
-This project is licensed under the Apache2 License. See the LICENSE file for details.
