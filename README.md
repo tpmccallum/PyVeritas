@@ -1,24 +1,16 @@
 # PyVeritas
 
-Revolutionizing Python testing with adaptive, intelligent, and developer-friendly tools.
+Robust, user-friendly unit testing and fuzzing support for your Python application. Designed to be simple (easy to code your tests) and accessible (all of your testing in the one place).
 
 # 🚀 Overview
 
-PyVeritas is an advanced software testing framework designed to push the boundaries of Python testing. By combining the precision of unit testing, the randomness of fuzzing, and the adaptability of AI, PyVeritas helps developers create robust, reliable, and high-quality Python code effortlessly.
-
-PyVeritas is code-aware, behavior-driven, and environment-adaptive. It doesn’t just test your code—it learns from it, evolves with it, and ensures every corner is thoroughly validated.
+PyVeritas is your easy-to-use software testing framework. PyVeritas combines unit testing, and the randomness of fuzzing to help you ensure the reliability and quality of your Python code.
 
 # 🌟 Features
 
-**Intelligent Fuzzing**: Automatically generates meaningful fuzzing inputs tailored to your specific code logic.
+**Fuzzing**: Create meaningful fuzzing inputs tailored to your specific code logic.
 
-**Behavioural Validation**: Compare your program's outputs against expected behaviours using AI models.
-
-**Dynamic Test Optimization**: Keeps your test suite lean and relevant by analyzing historical failures and code changes.
-
-**Cross-Environment Simulation**: Test across multiple Python versions and runtime environments.
-
-**Actionable Insights**: Provides real-time feedback on test coverage, bottlenecks, and high-risk areas.
+**Unit Testing**: Write and run lean and relevant tests for your existing Python code.
 
 # 🛠️ Installation
 
@@ -30,7 +22,9 @@ pip install pyveritas
 
 # ✨ Quick Start
 
-Example, testing a calculator function. Let's say you had a Python file called `test_suite.py` where you had implemented a `calculate_discount()` function. If you add the `run_tests()` and `run_fuzz_tests()`, as shown below, you could have a self-testing file (like this one) to improve the robustness of your code's execution:
+Example, testing a calculator function. Let's say you had a Python file called `my_code.py` where you had implemented a `calculate_discount()` function. 
+
+If you add the `run_unit_tests()` and `run_fuzz_tests()`, as shown below, you can ensure the robustness of your code:
 
 ```python
 import argparse
@@ -42,7 +36,7 @@ def calculate_discount(price: float, discount: float) -> float:
         raise ValueError("Invalid price or discount")
     return price * (1 - discount / 100)
 
-def run_tests():
+def run_unit_tests():
     # Test suite
     suite = VeritasTestSuite("DiscountCalculatorTests")
     
@@ -72,7 +66,7 @@ def main():
     args = parser.parse_args()
     
     if args.action == 'test':
-        run_tests()
+        run_unit_tests()
     elif args.action == 'fuzz':
         run_fuzz_tests()
 
@@ -83,7 +77,7 @@ if __name__ == "__main__":
 When calling the `test` and `fuzz` as arguments, your code (example as shown above) will return something similar to the following:
 
 ```bash
-$ python3 tests/test_suite.py test
+$ python3 tests/my_code.py test
 
 Running test suite: DiscountCalculatorTests
 Test 1 PASSED: Discount calculation is correct
@@ -97,7 +91,7 @@ Failed: 0
 ```
 
 ```bash
-$ python3 tests/test_suite.py fuzz
+$ python3 tests/my_code.py fuzz
 Running fuzz tests on function: calculate_discount
 Fuzzing iteration 1: PASSED with inputs {'price': 748.5057904261024, 'discount': 84.29362340396797}
 Fuzzing iteration 2: PASSED with inputs {'price': 595.7437257017222, 'discount': 49.09955272366074}
@@ -114,35 +108,7 @@ Passed: 1000
 Failed: 0
 ```
 
-# 🧠 How It Works
-
-## Code Analysis
-
-PyVeritas inspects your code for patterns, structure, and dependencies.
-
-## Test Generation
-
-Automatically generates tests based on code analysis and input specifications.
-
-## Execution
-
-Runs the tests with real-time metrics on coverage and edge-case detection.
-
-# Insights
-
-Provides actionable feedback, including risk areas and potential optimizations.
-
-# 🛡️ Why PyVeritas?
-PyVeritas doesn’t just test—it thinks. By leveraging machine learning, dynamic adaptation, and intelligent fuzzing, PyVeritas ensures you catch bugs that other tools miss. Whether you’re developing simple scripts or large-scale applications, PyVeritas is your ultimate testing companion.
-
-# 🏗️ Roadmap
-- [ ] Build the foundational test suite framework.
-- [ ] Integrate intelligent fuzzing with customizable input specifications.
-- [ ] Develop AI-driven behavioural models for output validation.
-- [ ] Add cross-environment compatibility testing.
-- [ ] Create a comprehensive feedback and insights dashboard.
-- [ ] Write comprehensive documentation
-- [ ] Create contribution guide
+PyVeritas aims to simplify advanced testing scenarios without requiring users to write extensive boilerplate code or understand complex concepts.
 
 # 📚 Documentation
 

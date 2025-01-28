@@ -16,5 +16,12 @@ venv\Scripts\activate     # For Windows
 Install the requirements:
 
 ```bash
-pip3 install -r requirements.txt
+pip3 install -r dev-requirements.txt
+```
+
+Update the documentation:
+
+```bash
+sphinx-apidoc -o docs/ pyveritas
+make html
 ```
