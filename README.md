@@ -121,8 +121,14 @@ When calling the `test` and `fuzz` as arguments, your code (example as shown abo
 python3 tests/my_code.py test
 ```
 
+![Screenshot 2025-01-30 at 09 51 12](https://github.com/user-attachments/assets/af0baad8-1416-4418-a589-818cc47fb3b8)
+
 ```bash
 python3 tests/my_code.py fuzz
 ```
+
+![Screenshot 2025-01-30 at 09 51 39](https://github.com/user-attachments/assets/8c9abf41-209e-4506-9277-24b772192b17)
+
+![Screenshot 2025-01-30 at 09 51 55](https://github.com/user-attachments/assets/fcb3804e-338d-4935-812c-236ddb1ee24c)
 
 PyVeritas aims to simplify advanced testing scenarios without requiring users to write extensive boilerplate code or understand complex concepts.
