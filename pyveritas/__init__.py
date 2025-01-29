@@ -1,5 +1,5 @@
-from .suite import VeritasTestSuite
-from .fuzzer import VeritasFuzzer
+from .unit import VeritasTestSuite
+from .fuzz import VeritasFuzzer
 
 __all__ = ["VeritasTestSuite", "VeritasFuzzer"]
 
