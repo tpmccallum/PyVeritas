@@ -1,4 +1,6 @@
+import re
 import random
+import string
 from colorama import Fore, Style
 
 class VeritasFuzzer:
