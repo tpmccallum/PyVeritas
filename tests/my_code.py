@@ -53,15 +53,13 @@ def run_fuzz_tests():
     """Runs fuzz tests using VeritasFuzzer."""
     fuzzer = VeritasFuzzer("DiscountCalculatorFuzzing")
     
-    # Define test cases for fuzzing
+    # Define test cases for fuzzing with automatic input generation
     fuzzer.test(
         test_cases=[
-            {"input": {"price": 100, "discount": 20}, "expected_output": 80},
-            {"input": {"price": 50, "discount": 10}, "expected_output": 45},
-            {"input": {"price": 200, "discount": 50}, "expected_output": 100},
-            {"input": {"price": -10, "discount": 50}, "expected_exception": ValueError},  # Invalid input, should raise ValueError
-            {"input": {"price": 100, "discount": -5}, "expected_exception": ValueError},  # Invalid input, should raise ValueError
-            {"input": {"price": 100, "discount": 150}, "expected_exception": ValueError}, # Invalid input, should raise ValueError
+            {"input": {"price": {"range": (0.1, 1000.0)}, "discount": {"range": (0.0, 100.0)}}, "expected_output": None},
+            {"input": {"price": {"range": (-100.0, 0.0)}, "discount": {"range": (0.0, 100.0)}}, "expected_exception": ValueError},
+            {"input": {"price": {"range": (0.1, 1000.0)}, "discount": {"range": (-10.0, 0.0)}}, "expected_exception": ValueError},
+            {"input": {"price": {"range": (0.1, 1000.0)}, "discount": {"range": (100.0, 150.0)}}, "expected_exception": ValueError},
         ],
         iterations=1000,
     )

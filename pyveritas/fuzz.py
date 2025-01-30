@@ -41,6 +41,49 @@ class VeritasFuzzer:
         """
         return random.uniform(min_value, max_value)
 
+    @staticmethod
+    def int_range(min_value, max_value):
+        """
+        Generates a random integer within a specified range.
+
+        Args:
+            min_value (int): The lower bound of the range.
+            max_value (int): The upper bound of the range.
+
+        Returns:
+            int: A randomly generated integer within the range.
+        """
+        return random.randint(min_value, max_value)
+
+    @staticmethod
+    def char_range(start_char, end_char):
+        """
+        Generates a random character within a specified range.
+
+        Args:
+            start_char (str): The starting character of the range.
+            end_char (str): The ending character of the range.
+
+        Returns:
+            str: A randomly generated character within the range.
+        """
+        return chr(random.randint(ord(start_char), ord(end_char)))
+
+    @staticmethod
+    def string_range(length, start_char='a', end_char='z'):
+        """
+        Generates a random string of specified length with characters within a specified range.
+
+        Args:
+            length (int): The length of the string to generate.
+            start_char (str): The starting character of the range.
+            end_char (str): The ending character of the range.
+
+        Returns:
+            str: A randomly generated string within the specified character range.
+        """
+        return ''.join(VeritasFuzzer.char_range(start_char, end_char) for _ in range(length))
+
     def __init__(self, name):
         """
         Initializes the fuzzer with a name and default parameters.
@@ -86,6 +129,17 @@ class VeritasFuzzer:
             inputs = case.get("input", {})
             expected_output = case.get("expected_output", None)
             expected_exception = case.get("expected_exception", None)
+
+            # Automatically generate inputs if not provided
+            for key, value in inputs.items():
+                if isinstance(value, dict) and "range" in value:
+                    min_val, max_val = value["range"]
+                    if isinstance(min_val, float) or isinstance(max_val, float):
+                        inputs[key] = self.float_range(min_val, max_val)
+                    elif isinstance(min_val, int) or isinstance(max_val, int):
+                        inputs[key] = self.int_range(min_val, max_val)
+                    elif isinstance(min_val, str) and isinstance(max_val, str):
+                        inputs[key] = self.char_range(min_val, max_val)
 
             try:
                 result = function(**inputs)
