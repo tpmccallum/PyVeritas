@@ -30,7 +30,7 @@ If you add the `run_unit_tests()` and `run_fuzz_tests()`, as shown below, you ca
 import argparse
 from pyveritas import VeritasTestSuite, VeritasFuzzer
 
-# Your function to test
+# Function to test
 def calculate_discount(price: float, discount: float) -> float:
     """
     Calculates the discounted price.
@@ -49,7 +49,6 @@ def calculate_discount(price: float, discount: float) -> float:
         raise ValueError("Invalid price or discount")
     return price * (1 - discount / 100)
 
-# The run_tests function that you will create for your unit testing - this is just an example of how
 def run_tests():
     """Runs unit tests using VeritasTestSuite."""
     suite = VeritasTestSuite("DiscountCalculatorTests")
@@ -79,20 +78,17 @@ def run_tests():
     suite.run()
     suite.summary()
 
-# The function that you would write to fuzz test your existing Python code - this is just an example of how
 def run_fuzz_tests():
     """Runs fuzz tests using VeritasFuzzer."""
     fuzzer = VeritasFuzzer("DiscountCalculatorFuzzing")
     
-    # Define test cases for fuzzing
+    # Define test cases for fuzzing with automatic input generation
     fuzzer.test(
         test_cases=[
-            {"input": {"price": 100, "discount": 20}, "expected_output": 80},
-            {"input": {"price": 50, "discount": 10}, "expected_output": 45},
-            {"input": {"price": 200, "discount": 50}, "expected_output": 100},
-            {"input": {"price": -10, "discount": 50}, "expected_exception": ValueError},  # Invalid input, should raise ValueError
-            {"input": {"price": 100, "discount": -5}, "expected_exception": ValueError},  # Invalid input, should raise ValueError
-            {"input": {"price": 100, "discount": 150}, "expected_exception": ValueError}, # Invalid input, should raise ValueError
+            {"input": {"price": {"range": (0.1, 1000.0)}, "discount": {"range": (0.0, 100.0)}}, "expected_output": None},
+            {"input": {"price": {"range": (-100.0, 0.0)}, "discount": {"range": (0.0, 100.0)}}, "expected_exception": ValueError},
+            {"input": {"price": {"range": (0.1, 1000.0)}, "discount": {"range": (-10.0, 0.0)}}, "expected_exception": ValueError},
+            {"input": {"price": {"range": (0.1, 1000.0)}, "discount": {"range": (100.0, 150.0)}}, "expected_exception": ValueError},
         ],
         iterations=1000,
     )
@@ -100,7 +96,6 @@ def run_fuzz_tests():
     fuzzer.run(calculate_discount)
     fuzzer.summary()
 
-# You will need to ensure your existing Python code argument parser facilitates the running of test and fuzz - below is an example of how to achieve this easily using Python's argparse library
 def main():
     parser = argparse.ArgumentParser(description="Run unit tests or fuzz tests with PyVeritas.")
     parser.add_argument('action', choices=['test', 'fuzz'], help="Specify 'test' for unit tests or 'fuzz' for fuzzing tests.")
@@ -127,8 +122,8 @@ python3 tests/my_code.py test
 python3 tests/my_code.py fuzz
 ```
 
-![Screenshot 2025-01-30 at 09 51 39](https://github.com/user-attachments/assets/8c9abf41-209e-4506-9277-24b772192b17)
+![Screenshot 2025-01-30 at 10 32 51](https://github.com/user-attachments/assets/dde0503b-4bcc-4ab2-934a-f398f15e92b1)
 
-![Screenshot 2025-01-30 at 09 51 55](https://github.com/user-attachments/assets/fcb3804e-338d-4935-812c-236ddb1ee24c)
+![Screenshot 2025-01-30 at 10 32 29](https://github.com/user-attachments/assets/d100058f-4973-43b6-ae37-d0b3fdcd5b1f)
 
 PyVeritas aims to simplify advanced testing scenarios without requiring users to write extensive boilerplate code or understand complex concepts.
