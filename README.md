@@ -80,7 +80,7 @@ def celsius_to_fahrenheit(celsius):
 
 ## Example 1: Explicit Value
 
-The following test has one item in the `input` tuple. The item has a `value` of `0`.
+The following test has one item in the `input` tuple. The item has a `value` of `0`:
 
 ```json
 {
@@ -94,7 +94,7 @@ The following test has one item in the `input` tuple. The item has a `value` of 
 
 ## Example 2: Fuzzing with Range
 
-The following test has one item in the `input` tuple. The item has no `value` set. Therefore, PyVeritas will automatically create a random value within the `range` of `min` -100 and `max` 100.
+The following test has one item in the `input` tuple. The item has no `value` set. Therefore, PyVeritas will automatically create a random value within the `range` of `min` -100 and `max` 100:
 
 ```json
 {
@@ -113,7 +113,7 @@ When a random value is automatically created, PyVeritas repeats the random value
 
 ## Example 3: Using Regular Expressions
 
-The following test has one item in the `input` tuple. The item has no `value` set. Therefore, PyVeritas will automatically create a random value that adheres to the `regular_expression` (in this case a random email string).
+The following test has one item in the `input` tuple. The item has no `value` set. Therefore, PyVeritas will automatically create a random value that adheres to the `regular_expression` (in this case a random email string):
 
 ```json
 {
