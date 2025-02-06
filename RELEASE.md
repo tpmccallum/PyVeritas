@@ -1,22 +1,16 @@
 Set up a Python virtual environment:
 
 ```bash
-python -m venv venv
+python3 -m venv venv
 source venv/bin/activate  # For Unix
 venv\Scripts\activate     # For Windows
+export PYTHONPATH=$(pwd)
 ```
 
 Install the requirements:
 
 ```bash
 pip3 install -r dev-requirements.txt
-```
-
-Update the documentation:
-
-```bash
-sphinx-apidoc -o docs/ pyveritas
-make html
 ```
 
 Update the version number in the pyproject.toml file:

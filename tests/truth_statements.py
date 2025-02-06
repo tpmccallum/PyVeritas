@@ -1,6 +1,5 @@
 import argparse
 from pyveritas.unit import VeritasUnitTester
-from pyveritas.fuzz import VeritasFuzzer
 
 
 def convert_celsius_to_fahrenheit(celsius):
@@ -170,31 +169,6 @@ def run_unit_tests():
                     "type": "float",
                     "range": {"min": 3000.0, "max": 3000.9999999}
                 },
-                # # Regular expression for float with range
-                # {
-                #     "name": "seven",
-                #     "regular_expression": r"[-+]*(?:\d+\.\d*|\.?\d+)(?:[eE][-+]?\d+)?",
-                #     "type": "float",
-                #     "range": {"min": 0, "max": 100},
-                # },
-                # # Regular expression for float TODO
-                # {
-                #     "name": "seven",
-                #     "regular_expression": r"[-+]*(?:\d+\.\d*|\.?\d+)(?:[eE][-+]?\d+)?",
-                #     "type": "float",
-                # },
-                # # Regular expression for float
-                # {
-                #     "name": "seven",
-                #     "regular_expression": r"[-+]*(?:\d+\.\d*|\.?\d+)(?:[eE][-+]?\d+)?",
-                #     "type": "float",
-                # },
-                # # Regular expression for float
-                # {
-                #     "name": "seven",
-                #     "regular_expression": r"[-+]*(?:\d+\.\d*|\.?\d+)(?:[eE][-+]?\d+)?",
-                #     "type": "float",
-                # },
             ],
             "output": [{"name": "distance", "value": 925.8, "type": "float"}],
             "exception": "",
@@ -202,97 +176,15 @@ def run_unit_tests():
             "iterations": 1000,
         }
     )
-
-    # unit_tester.add(
-    #     {
-    #         "enabled": 1,
-    #         "function_name": "calculate_distance",
-    #         "description": "Calculate distance between two points on earth",
-    #         "input": [
-    #             {"name": "lat1", "value": 52.52, "type": "float"},
-    #             {"name": "lon1", "value": 13.405, "type": "float"},
-    #             {"name": "lat2", "value": 51.5074, "type": "float"},
-    #             {"name": "lon2", "value": -0.1278, "type": "float"},
-    #         ],
-    #         "output": [{"name": "distance", "value": 925.8, "type": "float"}],
-    #         "exception": "",
-    #         "exception_message": "",
-    #         "iterations": 1000,
-    #     }
-    # )
-
     unit_tester.run()
     unit_tester.summary()
 
-
-def run_fuzz_tests():
-    """Runs fuzz tests for the IoT functions."""
-    fuzz_tester = VeritasFuzzer("IoT Fuzz Tests")
-
-    fuzz_tester.add(
-        {
-            "enabled": 1,
-            "function_name": "calculate_stock_on_hand",
-            "description": "Test for generating sales report summary",
-            "input": [
-                {
-                    "name": "sales_data",
-                    "value": '[{"product": "Gadget", "units": 100}, {"product": "Widget", "units": 50}]',
-                    "type": "str",
-                    "regular_expression": '[{"product": "[A-Za-z]+", "units": "\\d+"}(,{"product": "[A-Za-z]+", "units": "\\d+"})*]',
-                },
-                {
-                    "name": "report_type",
-                    "value": "Summary",
-                    "type": "str",
-                    "regular_expression": "^(Summary|Detailed)$",
-                },
-                {
-                    "name": "customer_id",
-                    "value": 12345,
-                    "type": "int",
-                    "regular_expression": "[A-Za-z0-9]{5,10}",
-                },
-                {
-                    "name": "price",
-                    "value": 100,
-                    "type": "float",
-                    "range": {"min": 50, "max": 100},
-                },
-            ],
-            "output": [
-                {"name": "total_units", "value": 150, "type": "int"},
-                {
-                    "name": "company_id",
-                    "value": 12345,
-                    "type": "int",
-                    "regular_expression": "[A-Za-z0-9]{5,10}",
-                },
-                {
-                    "name": "price",
-                    "value": 100,
-                    "type": "float",
-                    "range": {"min": 50, "max": 100},
-                },
-            ],
-            "exception": "ValueError",
-            "exception_message": "Invalid sales data format or report type",
-            "iterations": 1000,
-        }
-    )
-    fuzz_tester.run()
-    fuzz_tester.summary()
-
-
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Run IoT functions or perform tests")
-    parser.add_argument("--unit", action="store_true", help="Run unit and fuzz tests")
-    parser.add_argument("--fuzz", action="store_true", help="Run unit and fuzz tests")
+    parser = argparse.ArgumentParser(description="Run functions or perform tests")
+    parser.add_argument("--unit", action="store_true", help="Run tests")
     args = parser.parse_args()
 
     if args.unit:
         run_unit_tests()
-    elif args.fuzz:
-        run_fuzz_tests()
     else:
         original_script_logic()
