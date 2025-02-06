@@ -1,8 +1,10 @@
 
 # PyVeritas - Easy Testing for Python
+
 Welcome to PyVeritas, a user-friendly testing framework that leverages JSON for defining tests, making it perfect for both beginners and seasoned developers. This framework supports both unit testing and fuzzing, ensuring your code is reliable and secure.
 
 # Installation
+
 Install PyVeritas using pip:
 
 ```bash
@@ -10,17 +12,25 @@ pip install pyveritas
 ```
 
 # Getting Started
+
 PyVeritas uses JSON for test case definitions, which are simple and intuitive even if you're new to JSON or Python.
 
 # Basics of a Test Case
-- Name: A descriptive name for your test.
-- Function: The Python function you're testing.
-- Input: Parameters to pass to the function.
-- Output: Expected results.
-- Iterations: Number of test runs for fuzzing (optional).
-- Exception: Expected exceptions (optional).
+
+- **Name**: A descriptive name for your test.
+
+- **Function**: The Python function you're testing.
+
+- **Input**: Parameters to pass to the function.
+
+- **Output**: Expected results.
+
+- **Iterations**: Number of test runs for fuzzing (optional).
+
+- **Exception**: Expected exceptions (optional).
 
 # JSON Structure Example
+
 Here's how a test case looks in JSON:
 
 ```json
@@ -41,27 +51,36 @@ Here's how a test case looks in JSON:
 ```
 
 # Types of Inputs
-Value: Direct value to use.
-Regular Expression: For generating values matching a pattern.
-Range: For generating numbers within specified limits.
+
+**Value**: Direct value to use.
+
+**Regular Expression**: For generating values matching a pattern.
+
+**Range**: For generating numbers within specified limits.
 
 # Precedence:
-Value (highest priority)
-Regular Expression
-Range
+
+`value` (highest priority)
+`regular_expression` (second highest priority)
+`range` (third highest priority)
+Items, within the `input` tuple that are without `value`, `regular_expression` and `range` will be automatically assigned a random `value` on the proviso that the item does have a `type` i.e. `"int"`, `"float"`.
 
 # Example Test Cases
+
 Below are a few test case examples.
 
-## Example 1: Basic Unit Test
-For a function converting Celsius to Fahrenheit:
+# Basic Function
+
+Here is a function converting Celsius to Fahrenheit:
 
 ```python
 def celsius_to_fahrenheit(celsius):
     return (celsius * 9 / 5) + 32
 ```
 
-### The test case:
+## Example 1: Explicit Value
+
+The following test has one item in the `input` tuple. The item has a `value` of `0`.
 
 ```json
 {
@@ -74,7 +93,8 @@ def celsius_to_fahrenheit(celsius):
 ```
 
 ## Example 2: Fuzzing with Range
-Fuzz testing the same function over a range of temperatures:
+
+The following test has one item in the `input` tuple. The item has no `value` set. Therefore, PyVeritas will automatically create a random value within the `range` of `min` -100 and `max` 100.
 
 ```json
 {
@@ -89,8 +109,11 @@ Fuzz testing the same function over a range of temperatures:
 }
 ```
 
+When a random value is automatically created, PyVeritas repeats the random value creation and testing for the function one thousand times (as defined in the `iterations` field). This is fuzzing and is great for discovering edge cases without you needing to hand write hundreds of tests with a different `value`.
+
 ## Example 3: Using Regular Expressions
-Testing email validation:
+
+The following test has one item in the `input` tuple. The item has no `value` set. Therefore, PyVeritas will automatically create a random value that adheres to the `regular_expression` (in this case a random email string).
 
 ```json
 {
@@ -105,29 +128,60 @@ Testing email validation:
 }
 ```
 
+Again, when a random value is automatically created, PyVeritas repeats the random value creation and testing for the function one thousand times (as defined in the `iterations` field). This is fuzzing and is great for discovering edge cases without you needing to hand write hundreds of tests with a different `value`.
+
 # Running Tests
-Here's how to set up and run your tests. Create a file called `my_tests.py`, and add the following code:
+Here's how to set up and run your tests. Let's use the temperature conversion function from above. Create a file called `my_tests.py`, and add the following code:
 
 ```python
+import argparse
 from pyveritas.unit import VeritasUnitTester
 
-def run_tests():
+
+def celsius_to_fahrenheit(celsius):
+    return (celsius * 9 / 5) + 32
+
+def original_script_logic():
+    print(f"0°C in Fahrenheit: {celsius_to_fahrenheit(0):.2f}")
+
+def run_unit_tests():
+    # Create an instance of the testing suite
     tester = VeritasUnitTester("My Test Suite")
-    
-    # Add your test cases here
-    tester.add({
-        "enabled": 1,
-        "function_name": "celsius_to_fahrenheit",
-        "description": "Convert 0°C to Fahrenheit",
-        "input": [{"name": "celsius", "value": 0, "type": "float"}],
-        "output": [{"name": "result", "value": 32, "type": "float"}]
-    })
+
+    # Add your individual test cases here
+    tester.add(
+        {
+            "enabled": 1,
+            "function_name": "celsius_to_fahrenheit",
+            "description": "Convert 0°C to Fahrenheit",
+            "input": [{"name": "celsius", "value": 0, "type": "float"}],
+            "output": [{"name": "result", "value": 32, "type": "float"}],
+        },
+        {
+            "enabled": 1,
+            "function_name": "celsius_to_fahrenheit",
+            "description": "Fuzz test for various temperatures",
+            "input": [
+                {"name": "celsius", "type": "float", "range": {"min": -100, "max": 100}}
+            ],
+            "output": [],
+            "iterations": 1000,
+        },
+    )
 
     tester.run()
     tester.summary()
 
 if __name__ == "__main__":
-    run_tests()
+    parser = argparse.ArgumentParser(description="Run functions or perform tests")
+    parser.add_argument("--unit", action="store_true", help="Run tests")
+    args = parser.parse_args()
+
+    if args.unit:
+        run_unit_tests()
+    else:
+        original_script_logic()
+
 ```
 
 
