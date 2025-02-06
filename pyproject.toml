@@ -4,7 +4,7 @@ build-backend = "flit.buildapi"
 
 [project]
 name = "pyveritas"
-version = "0.1.10"
+version = "0.1.11"
 description = "A Python testing tool that combines fuzzing and traditional unit tests."
 authors = [
     { name = "Tim McCallum", email = "mistermac2008@gmail.com" }
