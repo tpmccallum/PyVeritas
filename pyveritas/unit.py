@@ -103,8 +103,13 @@ class VeritasUnitTester(VeritasBase):
             )
         except Exception as e:
             self._evaluate_test(
-                f"Test {i}", input_params, e, expected_exception, exception_message
+                f"Test {i}",
+                input_params,
+                e,
+                expected_exception,
+                exception_message
             )
+
 
     def run(self, parallel=True):
         """

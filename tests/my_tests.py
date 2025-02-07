@@ -20,7 +20,8 @@ def run_unit_tests():
             "description": "Convert 0°C to Fahrenheit",
             "input": [{"name": "celsius", "value": 0, "type": "float"}],
             "output": [{"name": "result", "value": 32, "type": "float"}],
-        },
+        })
+    tester.add(
         {
             "enabled": 1,
             "function_name": "celsius_to_fahrenheit",
@@ -30,8 +31,7 @@ def run_unit_tests():
             ],
             "output": [],
             "iterations": 1000,
-        },
-    )
+        })
 
     tester.run()
     tester.summary()

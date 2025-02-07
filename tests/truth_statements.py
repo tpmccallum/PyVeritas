@@ -45,6 +45,9 @@ def validate_email(email):
     pattern = re.compile(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)")
     return bool(pattern.match(email))
 
+def divide(a, b):
+    """Divide two numbers."""
+    return a / b
 
 def original_script_logic():
     """Demonstrates the functionality of each function with example parameters."""
@@ -174,6 +177,18 @@ def run_unit_tests():
             "exception": "",
             "exception_message": "",
             "iterations": 1000,
+        })
+    unit_tester.add(
+        {
+            "enabled": 1,
+            "function_name": "divide",
+            "description": "Test division by zero",
+            "input": [
+                { "name": "a", "value": 10, "type": "int" },
+                { "name": "b", "value": 0, "type": "int" }
+            ],
+            "exception": "ZeroDivisionError",
+            "exception_message": "division by zero"
         }
     )
     unit_tester.run()

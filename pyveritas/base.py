@@ -62,29 +62,27 @@ class VeritasBase:
         self, desc, input_params, result, expected_exception, exception_message
     ):
         if expected_exception:
-            if isinstance(result, Exception) and isinstance(result, expected_exception):
-                self.passed += 1
-                logger.info(
-                    f"{Fore.GREEN}PASSED: {desc} with params {input_params} (Expected exception: {expected_exception}){Style.RESET_ALL}"
-                )
+            if isinstance(result, Exception):
+                # Check if exception type matches
+                if result.__class__.__name__ == expected_exception:
+                    # Check if the exception message matches (if provided)
+                    if exception_message is None or exception_message in str(result):
+                        self.passed += 1
+                        logger.info(
+                            f"{Fore.GREEN}PASSED: {desc} with params {input_params} (Expected exception: {expected_exception}){Style.RESET_ALL}"
+                        )
+                        return
+                    else:
+                        error_msg = f"Expected exception message: '{exception_message}', Got: '{str(result)}'"
+                else:
+                    error_msg = f"Expected exception: {expected_exception}, Got: {result.__class__.__name__}"
             else:
-                self.failed += 1
-                self.failed_items.append(
-                    (
-                        desc,
-                        input_params,
-                        f"Expected exception: {expected_exception}, Got: {result}",
-                    )
-                )
-                logger.error(
-                    f"{Fore.RED}FAILED: {desc} with params {input_params} (Expected exception: {expected_exception}, Got: {result}){Style.RESET_ALL}"
-                )
-        else:
-            # Here we assume if no exception is expected, any result is considered a pass for simplicity
-            self.passed += 1
-            logger.info(
-                f"{Fore.GREEN}PASSED: {desc} with params {input_params}{Style.RESET_ALL}"
-            )
+                error_msg = f"Expected exception: {expected_exception}, but no exception was raised."
+
+            self.failed += 1
+            self.failed_items.append((desc, input_params, error_msg))
+            logger.error(f"{Fore.RED}FAILED: {desc} with params {input_params} ({error_msg}){Style.RESET_ALL}")
+
 
     def summary(self):
         """
