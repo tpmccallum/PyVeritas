@@ -122,10 +122,18 @@ git push -u origin my_new_branch
 
 # Cutting a new release
 
-Update the version/release (increment the `version`):
+Update the version/release (increment the `version` in the `pyproject.toml` file):
 
 ```toml
 version = "x.x.x"
+```
+
+Push changes to the GitHub repository:
+
+```bash
+git add .
+git commit -m "Your Message"
+git push -u origin my_new_branch
 ```
 
 Use flit to build and publish:
