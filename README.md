@@ -157,4 +157,19 @@ pip3 install -e ~/PyVeritas
 
 After all, you want to extensively test locally before pushing to pypi, right?
 
+# Future development
+
+The following is a list of future developments needed:
+
+- A comprehensive library of pre-built rules for common data validation tasks ( which will prevent developers from having to write the same validation logic over and over again)
+- Collaboration between developers by providing a common language for defining data contracts
+- Demonstrations about using PyVeritas to validate data coming from external APIs.
+- Demonstrations about using PyVeritas to validate data as it flows through a data pipeline.
+- Instructions and examples of how to use PyVeritas rules within pytest tests.
+- Instructions on creating your own custom validation rules.
+- Pydantic Integration.
+- More detailed error messages that clearly indicate which rule failed and why.
+- The ability to customize error messages.
+- Lots of real-world examples showing how to use PyVeritas to solve different data validation problems.
+
 
