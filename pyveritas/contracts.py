@@ -1,8 +1,7 @@
-# pyveritas/contracts.py
 from abc import ABC, abstractmethod
 import typing as t
-from pyveritas.rules import Rule, RuleContext
-from pyveritas.rules import TypeRule, RequiredRule, StringRegexRule, NumberRangeRule, StringLengthRule
+from pyveritas.rules import Rule, RuleContext, StringRegexRule, NumberRangeRule, StringLengthRule, RequiredRule
+
 
 class DataContract(ABC):
     """
@@ -18,12 +17,7 @@ class DataContract(ABC):
         Validates the given data against the contract's rules.
         Returns a list of error messages.  If the list is empty, the data is valid.
         """
-        errors = []
-        context = context or RuleContext()
-        for rule in self.rules:
-            if not rule.is_valid(data, context):
-                errors.append(rule.error_message(data, context))
-        return errors
+        pass
 
     def add_rule(self, rule: Rule):
         """
@@ -36,6 +30,7 @@ class DataContract(ABC):
         Allows the contract to be called like a function.
         """
         return self.validate(data, context)
+
 
 class UserContract(DataContract):
     """
@@ -54,3 +49,10 @@ class UserContract(DataContract):
             RequiredRule("name"),
             StringLengthRule(field="name", min_length=3, max_length=20)
         ])
+
+    def validate(self, data: t.Dict, context: RuleContext = None) -> t.List[str]:
+        errors = []
+        for rule in self.rules:
+            if not rule.is_valid(data, context):
+                errors.append(rule.error_message(data, context))
+        return errors

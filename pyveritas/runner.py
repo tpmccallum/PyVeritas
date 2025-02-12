@@ -1,11 +1,9 @@
-# pyveritas/runner.py
-from pyveritas.base import DataFloBase
 from pyveritas.contracts import DataContract
 from pyveritas.validator import Validator
 import importlib
 import typing as t
 
-class TestRunner(DataFloBase):
+class TestRunner():
     """
     A test runner for DataContracts.
     """
@@ -34,4 +32,4 @@ class TestRunner(DataFloBase):
             self._evaluate_test(description, data, errors, expected_errors)
 
         print(f"Test suite {self.name} complete.")
-        self.summary() 
+        self.summary()

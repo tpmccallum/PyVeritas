@@ -1,11 +1,9 @@
-# pyveritas/rules.py
-
 import re  # For regular expression validation
 from datetime import datetime  # For date validation
 import typing as t
 from abc import ABC, abstractmethod
 import json
-
+    
 class RuleContext:
     """
     Provides context to rules during validation.  Can be extended for
@@ -13,6 +11,9 @@ class RuleContext:
     """
     def __init__(self, data:t.Dict = {}):
         self.context = data
+
+    def __str__(self):
+        return self.context
 
 class Rule(ABC):
     """
@@ -43,6 +44,9 @@ class Rule(ABC):
         return NotRule(self)
 
 
+    def __str__(self):
+        return self.error_message
+
 class AndRule(Rule):
     """
     Combines two rules with a logical AND.
@@ -62,6 +66,9 @@ class AndRule(Rule):
             return self.rule2.error_message(data, context)
 
 
+    def __str__(self):
+        return f'AndRule {str(self.rule1)} AND {str(self.rule2)}'
+
 class OrRule(Rule):
     """
     Combines two rules with a logical OR.
@@ -78,9 +85,12 @@ class OrRule(Rule):
         return f"Both rules failed: {self.rule1.error_message(data, context)} OR {self.rule2.error_message(data, context)}"
 
 
+    def __str__(self):
+        return f'OrRule {str(self.rule1)} OR {str(self.rule2)}'
+
 class NotRule(Rule):
     """
-    Negates a rule.
+        Negates a rule.
     """
 
     def __init__(self, rule: Rule):
@@ -92,9 +102,12 @@ class NotRule(Rule):
     def error_message(self, data: t.Dict, context: RuleContext = None) -> str:
         return f"Rule should not have been valid: {self.rule.error_message(data, context)}"
 
-# -----------------------------------------------------------------------------
-# String Validation Rules
-# -----------------------------------------------------------------------------
+    def __str__(self):
+        return f'NotRule NOT ({str(self.rule)})'
+
+    # -----------------------------------------------------------------------------
+    # String Validation Rules
+    # -----------------------------------------------------------------------------
 
 class StringRule(Rule):
     """Base class for string-based rules."""
@@ -187,9 +200,9 @@ class StringChoicesRule(StringRule):
         return f"Field '{self.field}' must be one of the following choices: {self.choices}"
 
 
-# -----------------------------------------------------------------------------
-# Numerical Validation Rules
-# -----------------------------------------------------------------------------
+    # -----------------------------------------------------------------------------
+    # Numerical Validation Rules
+    # -----------------------------------------------------------------------------
 
 class NumberRule(Rule):
     """Base class for number-based rules."""
@@ -237,39 +250,9 @@ class NumberRangeRule(NumberRule):
             return f"Field '{self.field}' must be at most {self.max_value}"
 
 
-class IntegerRule(TypeRule):
-    """
-    Specialization of TypeRule for integers.
-    """
-
-    def __init__(self, field: str):
-        super().__init__(field)
-
-    def is_valid(self, data: t.Dict, context: RuleContext = None) -> bool:
-        return isinstance(data.get(self.field), int)
-
-    def error_message(self, data: t.Dict, context: RuleContext = None) -> str:
-        return f"Field '{self.field}' must be an integer"
-
-
-class FloatRule(TypeRule):
-    """
-    Specialization of TypeRule for floats.
-    """
-
-    def __init__(self, field: str):
-        super().__init__(field)
-
-    def is_valid(self, data: t.Dict, context: RuleContext = None) -> bool:
-        return isinstance(data.get(self.field), float)
-
-    def error_message(self, data: t.Dict, context: RuleContext = None) -> str:
-        return f"Field '{self.field}' must be a float"
-
-
-# -----------------------------------------------------------------------------
-# Date and Time Validation Rules
-# -----------------------------------------------------------------------------
+    # -----------------------------------------------------------------------------
+    # Date and Time Validation Rules
+    # -----------------------------------------------------------------------------
 
 class DateTimeRule(Rule):
     """Base class for datetime-based rules."""
@@ -320,11 +303,11 @@ class DateTimeFormatRule(DateTimeRule):
         return f"Field '{self.field}' must be in the format: {self.format_string}"
 
 
-# -----------------------------------------------------------------------------
-# Boolean Validation Rules
-# -----------------------------------------------------------------------------
+    # -----------------------------------------------------------------------------
+    # Boolean Validation Rules
+    # -----------------------------------------------------------------------------
 
-class BooleanRule(TypeRule):
+class BooleanRule(Rule):
     """
     Checks if a field is a boolean.
     """
@@ -338,9 +321,9 @@ class BooleanRule(TypeRule):
     def error_message(self, data: t.Dict, context: RuleContext = None) -> str:
         return f"Field '{self.field}' must be a boolean"
 
-# -----------------------------------------------------------------------------
-# JSON Validation Rules
-# -----------------------------------------------------------------------------
+    # -----------------------------------------------------------------------------
+    # JSON Validation Rules
+    # -----------------------------------------------------------------------------
 
 class JSONRule(Rule):
     """
@@ -362,3 +345,38 @@ class JSONRule(Rule):
 
     def error_message(self, data: t.Dict, context: RuleContext = None) -> str:
         return f"Field '{self.field}' must contain valid JSON"
+
+# -----------------------------------------------------------------------------
+# Type Validation Rules
+# -----------------------------------------------------------------------------
+
+class TypeRule(Rule):
+    """
+    Checks if a field is of a specific type.
+    """
+
+    def __init__(self, field: str, expected_type: type):
+        self.field = field
+        self.expected_type = expected_type
+
+    def is_valid(self, data: t.Dict, context: RuleContext = None) -> bool:
+        return isinstance(data.get(self.field), self.expected_type)
+
+    def error_message(self, data: t.Dict, context: RuleContext = None) -> str:
+        return f"Field '{self.field}' must be of type {self.expected_type.__name__}"
+# -----------------------------------------------------------------------------
+# Required Validation Rules
+# -----------------------------------------------------------------------------
+
+class RequiredRule(Rule):
+    """
+    Checks if a field is present in the data.
+    """
+    def __init__(self, field: str):
+        self.field = field
+
+    def is_valid(self, data: t.Dict, context: RuleContext = None) -> bool:
+        return self.field in data
+
+    def error_message(self, data: t.Dict, context: RuleContext = None) -> str:
+        return f"Field '{self.field}' is required"

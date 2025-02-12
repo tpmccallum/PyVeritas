@@ -1,4 +1,3 @@
-# pyveritas/validator.py
 from pyveritas.contracts import DataContract
 from pyveritas.rules import RuleContext
 import typing as t

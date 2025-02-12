@@ -11,7 +11,7 @@ maintainers = [
     { name = "Tim McCallum", email = "mistermac2008@gmail.com" }
 ]
 readme = "README.md"
-license = { text = "Apache 2" }
+license = { file = "LICENSE" }
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
@@ -25,12 +25,13 @@ classifiers = [
     "Topic :: Software Development :: Quality Assurance",
 ]
 requires-python = ">=3.7"
-dynamic = ["version", "description"]
-dependencies = []
+version = "0.1.14"
+description = "Data Validation Engine"
+dependencies = ["typing-extensions"]
 
 [project.urls]
-Homepage = "https://github.com/tpmccallum/PyVeritas" # Replace with your repository URL
-Documentation = "https://pyveritas.readthedocs.io" # To be set up later
+Homepage = "https://github.com/tpmccallum/PyVeritas"
+Documentation = "https://pyveritas.readthedocs.io"
 
 [tool.flit.module]
 name = "pyveritas"
