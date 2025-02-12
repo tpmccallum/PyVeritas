@@ -42,3 +42,27 @@ pip install -r requirements.txt
 pip install -r dev-requirements.txt
 ```
 
+# Document
+
+```bash
+cd PyVeritas/docs
+make html
+```
+
+# Cut a new release
+
+Update the version/release:
+
+```
+```
+
+Push changes to repository:
+
+```bash
+cd PyVeritas
+git add .
+git commit -m "Your Message"
+git push
+```
+
+
