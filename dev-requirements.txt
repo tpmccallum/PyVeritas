@@ -1,5 +1,7 @@
 pytest
-colorama
+pytest-cov
+flake8
+mypy
+Sphinx
+sphinx-rtd-theme
 flit
-importlib
-
