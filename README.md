@@ -1,7 +1,6 @@
 # PyVeritas: The Declarative Data Contract Engine for Python
 
 [![License](https://img.shields.io/badge/license-Apache2-blue.svg)](LICENSE)  
-[![PyPI Version](https://img.shields.io/pypi/v/pyveritassvg)](https://pypi.org/project/pyveritas/) 
 
 PyVeritas empowers you to define and enforce data contracts in Python with a declarative, code-centric approach. Ensure data integrity, simplify integrations, and build robust applications by defining your data's expected structure and constraints **as code**.
 
@@ -149,19 +148,13 @@ flit publish
 If you are making changes to the versioned files (while testing in a non-versioned area) then do the following:
 
 ```bash
-rm -rf ./build ./dist ./PyVeritas.egg-info 
-rm -rf ./__pycache__ 
-pip3 install -e ~/PyVeritas 
-```
-
-After all, you want to extensively test locally before pushing to pypi, right?
-
-```bash
 pip3 uninstall PyVeritas -y
 rm -rf ./build ./dist ./PyVeritas.egg-info 
 rm -rf ./__pycache__ 
 python -c "import sys; print(sys.path)" 
 pip3 install -e ~/PyVeritas 
 ```
+
+After all, you want to extensively test locally before pushing to pypi, right?
 
 
