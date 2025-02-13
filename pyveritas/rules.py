@@ -601,6 +601,53 @@ class DateTimeFormatRule(DateTimeRule):
 
         return f"Field '{self.field}' must be in the format: {self.format_string}"
 
+class EndDateAfterStartDateRule(Rule):
+    """Checks if an end date happens after a start date.
+
+    The end date must happen after the start date for the
+    EndDateAfterStartDateRule to be valid.
+    """
+
+    def __init__(self, start_date_field: str, end_date_field: str):
+        """Initializes a new EndDateAfterStartDateRule.
+
+        Args:
+            start_date_field (str): The name of the field containing the start date.
+            end_date_field (str): The name of the field containing the end date.
+        """
+        self.start_date_field = start_date_field
+        self.end_date_field = end_date_field
+
+    def is_valid(self, data: t.Dict, context: RuleContext = None) -> bool:
+        """Checks if the end date is after the start date in the given data.
+
+        Args:
+            data (t.Dict): The data to validate.
+            context (RuleContext, optional): A RuleContext object providing additional
+                context for the validation. Defaults to None.
+
+        Returns:
+            bool: True if the end date is after the start date, False otherwise.
+        """
+        start_date = data.get(self.start_date_field)
+        end_date = data.get(self.end_date_field)
+
+        if not isinstance(start_date, datetime) or not isinstance(end_date, datetime):
+            return False  # Or raise an exception if you prefer strict type checking
+
+        return end_date > start_date
+
+    def error_message(self, data: t.Dict, context: RuleContext = None) -> str:
+        """Returns an error message if the end date is not after the start date.
+
+        Args:
+            data (t.Dict): The data that failed validation.
+            context (RuleContext, optional): Contextual information for the rule. Defaults to None.
+
+        Returns:
+            str: An error message describing the validation failure.
+        """
+        return f"End date must be after start date. Start Date:'{self.start_date_field}', End Date:'{self.end_date_field}'"
 
     # -----------------------------------------------------------------------------
     # Boolean Validation Rules
