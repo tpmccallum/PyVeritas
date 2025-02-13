@@ -104,7 +104,39 @@ pip install -r dev-requirements.txt
 
 5.  Make your changes.
 
-6.  Generate documentation:
+6. **Please write inline documentation** so that the [ReadTheDocs](https://pyveritas.readthedocs.io/en/latest/index.html) is accurate and up to date. Here is an example of the Google Style of Docstring formatting:
+
+```python
+def function_name(arg1, arg2):
+    """A one-line summary of the function.
+
+    A more detailed explanation of the function's purpose, arguments, and
+    return value.  This can span multiple lines.
+
+    Args:
+        arg1 (type): Description of arg1.
+        arg2 (type): Description of arg2.
+
+    Returns:
+        type: Description of the return value.
+
+    Raises:
+        ExceptionType: Explanation of why this exception is raised.
+
+    Examples:
+        ```python
+        result = function_name(1, 2)
+        print(result)  # Output: 3
+        ```
+
+    """
+    # Function implementation
+    return arg1 + arg2
+```
+
+See appendix A, below, for more information about properly documenting your code.
+
+7.  Generate documentation:
 
 ```bash
 cd PyVeritas/docs
@@ -173,3 +205,18 @@ The following is a list of future developments needed:
 - Lots of real-world examples showing how to use PyVeritas to solve different data validation problems.
 
 
+# Appendix A
+
+The following are true statements, relating to documenting your code contributions:
+
+- One-Line Summary: The first line of the docstring should be a concise summary of the function's purpose. This line should be capitalized and end with a period.
+
+- Detailed Explanation: The following lines should provide a more detailed explanation of the function. This can span multiple lines and should include information about the function's purpose, arguments, and return value.
+
+- Args: Section: This section describes the function's arguments. Each argument should be listed with its name, type, and a brief description.
+
+- Returns: Section: This section describes the function's return value. It should include the type of the return value and a brief description.
+
+- Raises: Section: This section lists any exceptions that the function might raise, along with an explanation of why they are raised.
+
+- Examples: Section: This section provides one or more examples of how to use the function. The examples should be clear, concise, and easy to understand. The code in the example should be enclosed in triple backticks (python) to indicate that it's a Python code block.
