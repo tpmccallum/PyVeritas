@@ -1,0 +1,7 @@
+pytest
+pytest-cov
+flake8
+mypy
+Sphinx
+sphinx-rtd-theme
+flit
