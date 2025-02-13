@@ -1,4 +1,4 @@
-# PyVeritas: The Declarative Data Contract Engine for Python
+# PyVeritas is the declarative data contract engine for Python, making Python data objects first-class citizens.
 
 [![License](https://img.shields.io/badge/license-Apache2-blue.svg)](LICENSE)  
 
